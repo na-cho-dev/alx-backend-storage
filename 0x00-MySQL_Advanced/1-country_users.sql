@@ -7,10 +7,11 @@
 -- If the table already exists, your script should not fail
 -- Your script can be executed on any databases
 
-CREATE TABLE IF NOT EXIST users (
+DROP TABLE IF EXIST users;
+CREATE TABLE users (
 	id INT NOT NULL AUTO_INCREMENT,
 	email VARCHAR(255) NOT NULL,
 	name VARCHAR(255),
 	PRIMARY KEY (id),
 	country ENUM('US', 'CO', 'TN') NOT NULL DEFAULT 'US'
-)
+);
