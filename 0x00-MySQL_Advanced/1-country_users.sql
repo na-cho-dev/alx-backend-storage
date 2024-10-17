@@ -13,4 +13,4 @@ CREATE TABLE IF NOT EXIST users (
 	name VARCHAR(255),
 	PRIMARY KEY (id),
 	country ENUM('US', 'CO', 'TN') NOT NULL DEFAULT 'US'
-g
+)
