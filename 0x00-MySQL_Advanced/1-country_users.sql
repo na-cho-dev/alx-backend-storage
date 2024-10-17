@@ -7,7 +7,7 @@
 -- If the table already exists, your script should not fail
 -- Your script can be executed on any databases
 
-DROP TABLE IF EXIST users;
+DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	id INT NOT NULL AUTO_INCREMENT,
 	email VARCHAR(255) NOT NULL,
