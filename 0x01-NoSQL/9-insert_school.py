@@ -13,6 +13,6 @@ def insert_school(mongo_collection, **kwargs):
         mongo_collection -> pymongo collection object
         kwargs           -> Variable number of key vaue args
     """
-    result = mongo_collection.insert_one(kwargs)
+    result = mongo_collection.insert_one(kwargs).inserted_id
 
     return result
