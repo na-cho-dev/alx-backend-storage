@@ -1,0 +1,2 @@
+// Insert document
+db.school.InsertOne({"name": "Holberton school"})
