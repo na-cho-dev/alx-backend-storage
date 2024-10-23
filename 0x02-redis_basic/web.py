@@ -25,15 +25,16 @@ def cache_page(func: Callable) -> Callable:
         redis_client = redis.Redis()
         count_key = f'count:{url}'
         content_key = f'content:{url}'
-        cached_page = redis_client.get(f'{url}')
 
+        cached_page = redis_client.get(content_key)
         if cached_page:
             print(f"Cache hit on {url}")
+            redis_client.incr(count_key)
             return cached_page.decode('utf-8')
 
         redis_client.incr(count_key)
         response = func(url)
-        redis_client.setex(content_key, 10, response.text)
+        redis_client.setex(content_key, 10, response)
 
         return response
 
