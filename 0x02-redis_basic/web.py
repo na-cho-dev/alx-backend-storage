@@ -12,24 +12,31 @@ from typing import Callable
 cache = redis.Redis()
 
 
-def cache_page(fn: Callable) -> Callable:
+def cache_page(func: Callable) -> Callable:
     """
     Caches the output of the fetched data
     """
-    @wraps(fn)
+    @wraps(func)
     def wrapper(url: str) -> str:
         """ Wrapper that:
             - check whether a url's data is cached
             - tracks how many times get_page is called
         """
-        client = redis.Redis()
-        client.incr(f'count:{url}')
-        cached_page = client.get(f'{url}')
+        redis_client = redis.Redis()
+        count_key = f'count:{url}'
+        content_key = f'content:{url}'
+        cached_page = redis_client.get(f'{url}')
+
         if cached_page:
+            print(f"Cache hit on {url}")
             return cached_page.decode('utf-8')
-        response = fn(url)
-        client.set(f'{url}', response, 10)
+
+        redis_client.incr(count_key)
+        response = func(url)
+        redis_client.setex(content_key, 10, response.text)
+
         return response
+
     return wrapper
 
 
