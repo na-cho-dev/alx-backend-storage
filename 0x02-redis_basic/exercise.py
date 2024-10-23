@@ -26,6 +26,9 @@ class Cache:
         return rand_key
     
     def get(self, key: str, fn: Optional[Callable[[bytes], any]] = None):
+        """
+        Gets value from Redis with key passed in as argument
+        """
         value = self._redis.get(key)
 
         if fn:
@@ -34,7 +37,13 @@ class Cache:
         return value
 
     def get_str(self, val):
+        """
+        Converts and returns val as string
+        """
         return str(val)
 
     def get_int(self, val):
+        """
+        Converts and returns val as int
+        """
         return int(val)
