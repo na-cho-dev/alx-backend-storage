@@ -27,9 +27,6 @@ class Cache:
     
     def get(self, key: str, fn: Optional[Callable[[bytes], any]] = None):
         value = self._redis.get(key)
-        
-        if value is None:
-            return None
 
         if fn:
             return fn(value)
