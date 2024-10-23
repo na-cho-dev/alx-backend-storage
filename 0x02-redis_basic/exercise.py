@@ -3,9 +3,27 @@
 Writing strings to Redis
 """
 from typing import Union, Callable, Optional
+from functools import wraps
 import redis
 import uuid
 
+
+def count_calls(fn: Callable) -> Callable:
+    """
+    A decorator that counts how many times a
+    function in Cache class is called.
+    
+    :param fn: The function to be decorated.
+    :return: The decorated function.
+    """
+    @wraps(fn)
+    def wrapper(self, *args, **kwargs):
+        key = fn.__qualname__
+        self._redis.incr(key)
+        return fn(self, *args, **kwargs)
+
+    return wrapper
+        
 
 class Cache:
     """
@@ -15,6 +33,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Store the input data in Redis using the random key
