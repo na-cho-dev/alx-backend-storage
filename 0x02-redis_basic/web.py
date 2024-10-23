@@ -48,3 +48,8 @@ def get_page(url: str) -> str:
         return response.text
     except requests.RequestException as e:
         return f"Error fetching the page: {e}"
+
+
+if __name__ == "__main__":
+    url = "http://slowwly.robertomurray.co.uk"
+    get_page(url)
