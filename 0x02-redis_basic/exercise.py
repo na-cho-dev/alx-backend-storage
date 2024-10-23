@@ -8,7 +8,7 @@ import redis
 import uuid
 
 
-def count_calls(fn: Callable) -> Callable:
+def count_calls(method: Callable) -> Callable:
     """
     A decorator that counts how many times a
     function in Cache class is called.
@@ -16,11 +16,20 @@ def count_calls(fn: Callable) -> Callable:
     :param fn: The function to be decorated.
     :return: The decorated function.
     """
-    @wraps(fn)
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
-        key = fn.__qualname__
-        self._redis.incr(key)
-        return fn(self, *args, **kwargs)
+        """
+        Decorator to count the number of times a method is called
+
+        Args:
+            method (Callable): The method to be decorated
+        Returns:
+            Callable: The wrapped method with call counting
+        """
+        key = method.__qualname__
+        if isinstance(self._redis, redis.Redis):
+            self._redis.incr(key)
+        return method(self, *args, **kwargs)
 
     return wrapper
         
